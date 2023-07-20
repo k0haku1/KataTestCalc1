@@ -1,69 +1,62 @@
 import java.util.Scanner;
 
 public class Main {
-    enum Type {
-        ARABIC, ROME, NON
-    }
-    static Scanner scanner = new Scanner(System.in);
-    public static void main(String[] args) {
-        String nums;
-        nums = scanner.nextLine();
-        String[] a = nums.split("[\\+\\-\\*\\/]");
-
-        String num1 = a[0];
-        String num2 = a[1];
-
-        Type num1Type = Type.ARABIC;
-        Type num2Type = Type.ARABIC;
-
-        for(int i = 0; i < num1.length(); i++) {
-            if(!Character.isDigit(num1.charAt(i))) {
-                if (num1.contains("X") || num1.contains("V") || num1.contains("I") || num1.contains("L")
-                        || num1.contains("C") || num1.contains("D") || num1.contains("M")){
-                    num1Type = Type.ROME;
+    public static Type CheckIsValue(String num){
+        Type type = Type.ARABIC;
+        for(int i = 0; i < num.length(); i++) {
+            if(!Character.isDigit(num.charAt(i))) {
+                if (num.contains("X") || num.contains("V") || num.contains("I") || num.contains("L")
+                        || num.contains("C") || num.contains("D") || num.contains("M")){
+                    type = Type.ROME;
                 }else {
-                    num1Type = Type.NON;
+                    type = Type.NON;
                 }
             } else{
-                num1Type = Type.ARABIC;
+                type = Type.ARABIC;
             }
         }
-        for(int y = 0; y < num2.length(); y++) {
-            if(!Character.isDigit(num2.charAt(y))) {
-                if (num2.contains("X") || num2.contains("V") || num2.contains("I") || num2.contains("L")
-                        || num2.contains("C") || num2.contains("D") || num2.contains("M")){
-                    num2Type = Type.ROME;
-                } else {
-                    num2Type = Type.NON;
-                }
-            } else {
-                num2Type = Type.ARABIC;
-            }
+        return type;
+    }
+
+    public static String calc(String nums)throws Exception{
+
+        String[] a = nums.split("[\\+\\-\\*\\/]");
+
+        String num1;
+        String num2;
+
+        if(a.length > 2 || a.length == 1){
+            throw new Exception();
+        }
+        else{
+            num1 = a[0];
+            num2 = a[1];
         }
 
+        Type num1Type = CheckIsValue(num1);
+        Type num2Type = CheckIsValue(num2);
+
         if (num1Type == Type.ARABIC && num2Type == Type.ARABIC) {
-            if(nums.contains("+")){
-                int n1 = Integer.parseInt(num1);
-                int n2 = Integer.parseInt(num2);
-                int sum = n1 + n2;
-                System.out.println(sum);
-            } else if (nums.contains("-")) {
-                int n1 = Integer.parseInt(num1);
-                int n2 = Integer.parseInt(num2);
-                int sum = n1 - n2;
-                System.out.println(sum);
-            } else if (nums.contains("/")){
-                int n1 = Integer.parseInt(num1);
-                int n2 = Integer.parseInt(num2);
-                int sum = n1 / n2;
-                System.out.println(sum);
-            } else if (nums.contains("*")){
-                int n1 = Integer.parseInt(num1);
-                int n2 = Integer.parseInt(num2);
-                int sum = n1 * n2;
-                System.out.println(sum);
-            } else {
-                System.out.println("Операция не определена, напишите выражение!");
+            int n1 = Integer.parseInt(num1);
+            int n2 = Integer.parseInt(num2);
+            if((n1 >= 1 && n1 <= 10) && (n2 >= 1 && n2 <= 10)){
+                if(nums.contains("+")){
+                    int sum = n1 + n2;
+                    System.out.println(sum);
+                } else if (nums.contains("-")) {
+                    int sum = n1 - n2;
+                    System.out.println(sum);
+                } else if (nums.contains("/")){
+                    int sum = n1 / n2;
+                    System.out.println(sum);
+                } else if (nums.contains("*")){
+                    int sum = n1 * n2;
+                    System.out.println(sum);
+                } else {
+                    throw new Exception();
+                }
+            }else{
+                throw new Exception();
             }
         } else if (num1Type == Type.ROME && num2Type == Type.ROME) {
             toInteger str1 = new toInteger();
@@ -85,12 +78,19 @@ public class Main {
                 int sum = res1 * res2;
                 toRome.intToRoman(sum);
             } else {
-                System.out.println("Операция не определена, напишите выражение!");
+                throw new Exception();
             }
         } else if (num1Type == Type.NON && num2Type == Type.NON){
-            System.out.println("ОШИБКА");
+            throw new Exception();
         } else {
-            System.out.println("ОШИБКА");
+            throw new Exception();
         }
+        return num1;
+    }
+    static Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) throws Exception {
+
+        String nums = scanner.nextLine();
+        calc(nums);
     }
 }

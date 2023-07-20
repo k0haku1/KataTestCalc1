@@ -29,7 +29,6 @@ public class toInteger {
                     if (s1 >= s2)
                     {
                         total = total + s1;
-                        System.out.println("ОШИБКА");
                     }
                     else
                     {
